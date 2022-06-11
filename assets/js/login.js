@@ -52,6 +52,7 @@ $(function () {
         if(res.status !==0) return layer.msg(res.message)
         layer.msg('登录成功')
         localStorage.setItem('token',res.token)
+        localStorage.setItem('pwd',$("[name=password]").val())
         // 跳转到首页
         location.href = '/index.html'
       }
