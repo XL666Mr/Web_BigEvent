@@ -62,3 +62,6 @@ $(".back").on("click", (e) => {
     }
   );
 });
+function change(){
+  $('#change').addClass('layui-this').next().removeClass('layui-this')
+}

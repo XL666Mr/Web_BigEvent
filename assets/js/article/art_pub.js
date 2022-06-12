@@ -41,6 +41,42 @@ $(function () {
   $("#btnSave2").on("click", function () {
     art_state = "草稿";
   });
+  //发布文章
+  $("#form-pub").on("submit", function (e) {
+    e.preventDefault();
+    const fd = new FormData($(this)[0]);
+    fd.append("state", art_state);
+    //  将封面裁剪过后的图片，输出为一个文件对象
+    $image
+      .cropper("getCroppedCanvas", {
+        width: 400,
+        height: 280,
+      })
+      .toBlob(function (blob) {
+        fd.append("cover_img", blob);
+        publishArticle(fd)
+      });
+  });
+  function publishArticle(fd) {
+    $.ajax({
+      method: "POST",
+      url: "/my/article/add",
+      data: fd,
+      // 注意：如果向服务器提交的是 FormData 格式的数据，
+      // 必须添加以下两个配置项
+      contentType: false,
+      processData: false,
+      success: function (res) {
+        if (res.status !== 0) {
+          return layer.msg("发布文章失败！");
+        }
+        layer.msg("发布文章成功！");
+        // 发布文章成功后，跳转到文章列表页面
+        location.href = "/article/art_list.html";
+        window.parent.change()
+      },
+    });
+  }
 
   // 1. 初始化图片裁剪器
   var $image = $("#image");
